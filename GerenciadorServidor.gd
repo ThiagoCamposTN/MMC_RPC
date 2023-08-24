@@ -1,6 +1,5 @@
 extends Node
 
-# These signals can be connected to by a UI lobby scene or the game scene.
 signal cliente_se_conectou(id, nome)
 
 const PORTA_PADRAO 		= 7000
@@ -8,13 +7,8 @@ const IP_LOCAL 			= "127.0.0.1" # IPv4 localhost
 const CONEXOES_MAXIMA 	= 20
 const ID_SERVIDOR 		= 1
 
-# This will contain player info for every player, with the keys being each player's unique IDs.
 var clientes = {}
-
-# This is the local player info. This should be modified locally before the connection is made.
-# It will be passed to every other peer.
-# For example, the value of "name" can be set to something the player entered in a UI scene.
-var cliente_info = {"nome": "Servidor"}
+var cliente_info = {}
 
 var players_loaded = 0
 
@@ -36,10 +30,10 @@ func criar_sala(porta):
 		return erro
 	get_tree().network_peer = participante
 	
+	cliente_info = {"nome": "Servidor"}
 	clientes["1"] = cliente_info
 
 func _cliente_se_conectou(id):
-#	print("Um novo cliente se conectou com o ID: ", id)
 	var nome = nomear_cliente()
 	adicionar_cliente_a_lista(id, nome)
 	var ip_do_cliente = get_tree().network_peer.get_peer_address(id)
