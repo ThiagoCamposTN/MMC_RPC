@@ -42,7 +42,6 @@ func _cliente_se_conectou(id):
 #	print("Um novo cliente se conectou com o ID: ", id)
 	var nome = nomear_cliente()
 	adicionar_cliente_a_lista(id, nome)
-	rpc("atualizar_lista_de_clientes", clientes)
 	var ip_do_cliente = get_tree().network_peer.get_peer_address(id)
 	emit_signal("cliente_se_conectou", nome, ip_do_cliente)
 
@@ -54,7 +53,3 @@ func adicionar_cliente_a_lista(id, nome):
 	var informacao_cliente = {}
 	informacao_cliente["nome"] = nome
 	clientes[id] = informacao_cliente
-
-func atualizar_lista_de_clientes(clientes):
-	self.clientes = clientes
-	self.cliente_info = clientes[get_tree().network_peer.get_unique_id()]
