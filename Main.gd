@@ -45,8 +45,8 @@ func calcular_mmc(numero1, numero2):
 		if x in mult_numero2:
 			return x
 
-func atualizar_resultado_servidor(numero1, numero2, resultado, tempo):
-	var texto = "({0} us) MMC entre {1} e {2} é {3}".format([tempo, numero1, numero2, str(resultado)])
+func atualizar_resultado_servidor(numero1, numero2, resultado, tempo, nome):
+	var texto = "{4}: ({0} us) MMC entre {1} e {2} é {3}".format([tempo, numero1, numero2, str(resultado), nome])
 	$Servidor/VBoxContainer/Resultados.add_item(texto)
 
 remote func calcular_com_servidor(numero1, numero2):
@@ -54,7 +54,8 @@ remote func calcular_com_servidor(numero1, numero2):
 	var resultado 		= calcular_mmc(numero1, numero2)
 	var fim_contador 	= OS.get_ticks_usec()
 	var id_cliente 		= get_tree().get_rpc_sender_id()
-	atualizar_resultado_servidor(numero1, numero2, resultado, fim_contador - inicio_contador)
+	var nome_cliente = GerenciadorServidor.clientes[id_cliente]["nome"]
+	atualizar_resultado_servidor(numero1, numero2, resultado, fim_contador - inicio_contador, nome_cliente)
 	rpc_id(id_cliente, "enviar_resultado_para_cliente", resultado, fim_contador - inicio_contador)
 
 remote func enviar_resultado_para_cliente(resultado, tempo):
